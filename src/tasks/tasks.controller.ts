@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Logger } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Logger, BadRequestException, NotFoundException } from '@nestjs/common';
 import { TasksService, TasksInterface } from './tasks.service';
 @Controller('tasks')
 export class TasksController {
@@ -25,19 +25,38 @@ export class TasksController {
     }
 
     @Put(':id')
-    update(@Param('id') id: number,
-           @Body('title') title: string,
-           @Body('description') description: string,
-           @Body('done') done: boolean): TasksInterface{
-        this.logger.log('Actualizando tarea con id: ' + id);
-        return this.taskService.update(id, title, description, done);
+    update(@Param('id') id: number, @Body('title') title: string, @Body('done') done: boolean): TasksInterface {
+        
+        const taskId = parseInt(id.toString(), 10);
+        if (isNaN(taskId)) {
+            throw new BadRequestException('ID inválido');
+        }
+        
+        const task = this.taskService.findOne(taskId);
+        if (!task) {
+            throw new NotFoundException('No se encontró la tarea con id: ' + taskId);
+        }
+    
+        this.logger.log('Actualizando tarea con id: ' + taskId);
+        const updatedTask = this.taskService.update(taskId, title, done);
+        return updatedTask;
     }
 
-    @Delete('id')
-    delete(@Param('id') id:number): void{
-        this.logger.log('Borrando tarea con id: ' + id);
-        this.taskService.delete(id);
+    @Delete(':id')
+    delete(@Param('id') id: string): void {
+    const taskId = parseInt(id, 10);
+    if (isNaN(taskId)) {
+        throw new BadRequestException('ID inválido');
     }
+    
+    const task = this.taskService.findOne(taskId);
+    if (!task) {
+        throw new NotFoundException('No se encontró la tarea con id: ' + taskId);
+    }
+    
+    this.logger.log('Eliminando tarea con id: ' + taskId);
+    this.taskService.delete(taskId);
+}
 
 
 }

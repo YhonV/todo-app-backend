@@ -4,7 +4,6 @@ import { Injectable } from '@nestjs/common';
 export interface TasksInterface {
     id: number;
     title: string;
-    description: string;
     done: boolean;
 }
 
@@ -17,7 +16,7 @@ export class TasksService {
     findAll(): TasksInterface[]{
         return this.tasks;
     }
-
+        
     findOne(id: number): TasksInterface{
         return this.tasks.find(task => task.id === id);
     }
@@ -26,18 +25,16 @@ export class TasksService {
         const task: TasksInterface = {
             id: this.idCounter++,
             title,
-            description: '',
             done: false,
         };
         this.tasks.push(task);
         return task;
     }
 
-    update(id:number, title:string, description:string, done:boolean): TasksInterface{
+    update(id:number, title:string, done:boolean): TasksInterface{
         const task = this.findOne(id);
         if (task){
             task.title = title;
-            task.description = description;
             task.done = done;
         }
         return task;
