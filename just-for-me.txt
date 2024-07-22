@@ -1,0 +1,23 @@
+— Esto no es más que una nota para mí mismo. 
+
+¿Como empecé con el desarrollo de esta app? (Por más sencillo que sea)
+
+Inicié cada proyecto, en este caso el backend maneja Nestjs. Así que para su código inicio es: 
+
+npm i -g nestjs/cli
+
+nest new todo-backend
+
+ Por otro lado, luego creé el proyecto que será encargado del frontend, este fue desarrollado con React solo porque sí, necesito aprenderlo. 
+
+npx create-react-app todo-frontend
+
+Luego, seguí con el backend creando el modulo de tasks, utilicé estos comandos (sin embargo los pude crear igualmente en el IDE)
+
+nest g module tasks
+nest g service tasks
+nest g controller tasks
+
+Para seguir, empecé ya creando el crud, es decir, mi services. Creé una interfaz de la clase task, y luego realicé su implementación.   Después de haber realizado los métodos correspondientes, pasé a realizar el controlador para cada método y a la par me aseguré que en el main.ts tuviera el app.enableCors para que se pueda comunicar el front con el back.
+
+Vale, luego de esto hice algo propio que fue agregar logs a la app, solo para probarlos del antiguo proyecto de logs que tengo en mi repositorio. Ah! Y también agregué Swagger :D 
